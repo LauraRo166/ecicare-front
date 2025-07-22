@@ -1,0 +1,14 @@
+# docker-compose testing
+
+services:
+    sarabi-frontend-dev:
+        build:
+            context: .
+            target: build
+        container_name: ecicare-dev
+        ports:
+            - "5173:5173"
+        volumes:
+            - .:/app
+            - /app/node_modules
+        command: npm run dev -- --host
