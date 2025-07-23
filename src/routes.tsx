@@ -2,55 +2,29 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { Login } from "./pages/LoginPage.tsx";
 import { DashboardLayout } from "./components/dashboards/DashboardLayout.tsx";
-import { DashboardPage } from "./pages/DashboarPage.tsx";
+import { MetricsPage } from "./pages/MetricsPage.tsx";
 import { ConfigurationPage } from "./pages/ConfigurationPage.tsx";
-import { SupportPage } from "./pages/SupportPage.tsx";
-import { UserPage } from "./pages/UsersPage.tsx";
-import { ReportsPage } from "./pages/ReportsPage.tsx";
-import { AlertsPage } from "./pages/AlertPages.tsx";
-import { RankingPage } from "./pages/RankingPage.tsx";
-import { ContentPage } from "./pages/ContentPage.tsx";
-import { CompanyPage } from "./pages/CompanyPage.tsx";
+import { ModulesPage } from "./pages/ModulesPage.tsx";
+import { AwardsPage } from "./pages/AwardsPage.tsx";
 
-export const AppRoutes = () => {
-    return (
-        <Routes>
-            <Route path="*" element={<Navigate to="/login" />} />
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
+export const AppRoutes = () => (
+    <Routes>
+        {/* Redirecciones */}
+        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
 
-            <Route element={<DashboardLayout />}>
-                <Route
-                    element={
-                        <ProtectedRoute allowedRoles={["ADMIN", "EMPLOYEER"]} />
-                    }
-                >
-                    <Route path="/metricas" element={<DashboardPage />} />
-                    <Route path="/soporte" element={<SupportPage />} />
-                    <Route path="/usuarios" element={<UserPage />} />
-                    <Route path="/reportes" element={<ReportsPage />} />
-                    <Route
-                        path="/configuracion"
-                        element={<ConfigurationPage />}
-                    />
-                </Route>
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Rutas protegidas con layout */}
+        <Route element={<DashboardLayout />}>
+            <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+                <Route path="/metricas" element={<MetricsPage />} />
+                <Route path="/modulos" element={<ModulesPage />} />
+                <Route path="/premios" element={<AwardsPage />} />
+                <Route path="/configuracion" element={<ConfigurationPage />} />
+
             </Route>
-
-            <Route element={<DashboardLayout />}>
-                <Route
-                    element={<ProtectedRoute allowedRoles={["ADMIN"]} />}
-                >
-                    <Route path="/alertas" element={<AlertsPage />} />
-                    <Route path="/modulos" element={<RankingPage />} />
-                </Route>
-            </Route>
-
-            <Route element={<DashboardLayout />}>
-                <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
-                    <Route path="/premios" element={<ContentPage />} />
-                    <Route path="/empresas" element={<CompanyPage />} />
-                </Route>
-            </Route>
-        </Routes>
-    );
-};
+        </Route>
+    </Routes>
+);

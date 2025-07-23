@@ -26,7 +26,7 @@ const mainNavItems = [
         name: "Módulos",
         href: "/modulos",
         icon: <ChartSpline size={25} />,
-        allowedRoles: ["EMPLOYEER"],
+        allowedRoles: ["ADMIN"],
     },
     {
         name: "Premios",
@@ -34,19 +34,15 @@ const mainNavItems = [
         icon: <Newspaper size={25} />,
         allowedRoles: ["ADMIN"],
     },
-    
-];
-
-// bottom items
-const secondaryNavItems = [
-    { name: "Soporte", href: "/soporte", icon: <Headset size={25} /> },
     {
-        name: "Configuracion",
+        name: "Configuración",
         href: "/configuracion",
         icon: <Settings size={25} />,
     },
     { name: "Cerrar Sesión", href: "/login", icon: <LogOut size={25} /> },
+    
 ];
+
 
 export function Sidebar() {
     const { role, logout } = useAuth();
@@ -58,7 +54,7 @@ export function Sidebar() {
     );
 
     return (
-    <aside className="flex h-screen w-80 flex-col bg-white px-5 py-8 justify-between">
+    <aside className="flex h-screen w-80 flex-col bg-white px-5 py-8 justify-between border-r border-gray-200">
         {/* Top logo */}
         <div className="mb-10 flex items-center justify-center">
             <img src={logoTop} alt="Logo de EciCare" className="h-20 w-auto" />
@@ -66,35 +62,35 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex-1">
-            <ul className="flex flex-col gap-y-6">
-                {filteredMainNavItems.map((item, idx) => (
+            <ul className="flex flex-col gap-y-8">
+                {filteredMainNavItems.map((item) => (
                     <li key={item.name}>
-                        <NavLink
-                            to={item.href}
-                            className={({ isActive }) =>
-                                isActive
-                                    ? "flex items-center gap-x-4 rounded-2xl px-6 py-5 bg-[#e74c3c] text-white font-bold text-xl shadow transition-all"
-                                    : "flex items-center gap-x-4 rounded-2xl px-6 py-5 text-black font-bold text-xl hover:bg-[#f5f5f5] transition-all"
-                            }
-                        >
-                            {item.icon}
-                            <span>{item.name}</span>
-                        </NavLink>
+                        {item.name === "Cerrar Sesión" ? (
+                            <button
+                                onClick={logout}
+                                className="flex items-center gap-x-4 rounded-2xl px-2 py-2 text-[#333] font-semibold text-[1.1rem] hover:bg-[#f5f5f5] transition-all w-full"
+                            >
+                                {item.icon}
+                                <span>{item.name}</span>
+                            </button>
+                        ) : (
+                            <NavLink
+                                to={item.href}
+                                className={({ isActive }) =>
+                                    isActive
+                                        ? "flex items-center gap-x-4 rounded-2xl px-2 py-2 bg-[#d84239] text-white font-semibold text-[1.1rem] shadow transition-all"
+                                        : "flex items-center gap-x-4 rounded-2xl px-2 py-2 text-[#333] font-semibold text-[1.1rem] hover:bg-[#f5f5f5] transition-all"
+                                }
+                            >
+                                {item.icon}
+                                <span>{item.name}</span>
+                            </NavLink>
+                        )}
                     </li>
                 ))}
-                {/* Cerrar Sesión */}
-                <li>
-                    <button
-                        onClick={logout}
-                        className="flex items-center gap-x-4 rounded-2xl px-6 py-5 text-black font-bold text-xl hover:bg-[#f5f5f5] transition-all w-full"
-                    >
-                        <LogOut size={32} />
-                        <span>Cerrar Sesión</span>
-                    </button>
-                </li>
             </ul>
         </nav>
-
+        
         {/* Bottom logo */}
         <div className="flex items-center justify-center mt-10">
             <img src={logoBottom} alt="Logo inferior" className="h-40 w-auto" />
