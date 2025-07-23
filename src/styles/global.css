@@ -1,10 +1,7 @@
 @import "tailwindcss";
 
-*,
-*::before,
-*::after {
-    font-family: "Poppins", sans-serif;
-    color: white;
+body {
+    color: #222;
 }
 
 .app-container {

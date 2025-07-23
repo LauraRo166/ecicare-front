@@ -25,7 +25,7 @@ export const AppRoutes = () => {
                         <ProtectedRoute allowedRoles={["ADMIN", "EMPLOYEER"]} />
                     }
                 >
-                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/metricas" element={<DashboardPage />} />
                     <Route path="/soporte" element={<SupportPage />} />
                     <Route path="/usuarios" element={<UserPage />} />
                     <Route path="/reportes" element={<ReportsPage />} />
@@ -38,16 +38,16 @@ export const AppRoutes = () => {
 
             <Route element={<DashboardLayout />}>
                 <Route
-                    element={<ProtectedRoute allowedRoles={["EMPLOYEER"]} />}
+                    element={<ProtectedRoute allowedRoles={["ADMIN"]} />}
                 >
                     <Route path="/alertas" element={<AlertsPage />} />
-                    <Route path="/ranking" element={<RankingPage />} />
+                    <Route path="/modulos" element={<RankingPage />} />
                 </Route>
             </Route>
 
             <Route element={<DashboardLayout />}>
                 <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
-                    <Route path="/contenido" element={<ContentPage />} />
+                    <Route path="/premios" element={<ContentPage />} />
                     <Route path="/empresas" element={<CompanyPage />} />
                 </Route>
             </Route>

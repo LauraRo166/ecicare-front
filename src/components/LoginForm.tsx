@@ -34,7 +34,7 @@ const Login: React.FC = () => {
                 id: "user-local-123",
                 email: "local@test.com",
                 name: "Usuario de Prueba",
-                role: "EMPLOYEER",
+                role: "ADMIN",
             };
 
             // 2. Procesa la respuesta falsa como si fuera real
@@ -48,7 +48,7 @@ const Login: React.FC = () => {
 
             // 3. Llama a tu contexto de autenticación y redirige
             login(user, token);
-            navigate("/dashboard");
+            navigate("/metricas");
         } else {
             setError(
                 "Credenciales incorrectas. Intenta con las credenciales locales."
@@ -81,7 +81,7 @@ const Login: React.FC = () => {
 
             // 3. Llama a tu contexto de autenticación y redirige
             login(user, token);
-            navigate("/dashboard");
+            navigate("/metricas");
         } else {
             setError(
                 "Credenciales incorrectas. Intenta con las credenciales locales."
