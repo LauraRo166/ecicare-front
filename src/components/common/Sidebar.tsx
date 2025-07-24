@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
-import logo from "@/assets/logo/logo.png";
+import logoBottom from "@/assets/logo/logo2.jpg";
+import logoTop from "@/assets/logo/ecicare.png";
 import { useAuth } from "@/contexts/AuthContext";
 import {
     OctagonAlert,
@@ -17,56 +18,31 @@ import {
 // top itens
 const mainNavItems = [
     {
-        name: "Dashboard",
-        href: "/dashboard",
+        name: "Métricas",
+        href: "/metricas",
         icon: <ChartPie size={25} />,
     },
     {
-        name: "Ranking",
-        href: "/ranking",
+        name: "Módulos",
+        href: "/modulos",
         icon: <ChartSpline size={25} />,
-        allowedRoles: ["EMPLOYEER"],
+        allowedRoles: ["ADMIN"],
     },
     {
-        name: "Gestion de Contenido",
-        href: "/contenido",
+        name: "Premios",
+        href: "/premios",
         icon: <Newspaper size={25} />,
         allowedRoles: ["ADMIN"],
     },
     {
-        name: "Gestion de Empresas",
-        href: "/empresas",
-        icon: <Building size={25} />,
-        allowedRoles: ["ADMIN"],
-    },
-    {
-        name: "Gestion de Usuarios",
-        href: "/usuarios",
-        icon: <UserRoundCog size={25} />,
-    },
-    {
-        name: "Alertas",
-        href: "/alertas",
-        icon: <OctagonAlert size={25} />,
-        allowedRoles: ["EMPLOYEER"],
-    },
-    {
-        name: "Reportes",
-        href: "/reportes",
-        icon: <FileChartColumn size={25} />,
-    },
-];
-
-// bottom items
-const secondaryNavItems = [
-    { name: "Soporte", href: "/soporte", icon: <Headset size={25} /> },
-    {
-        name: "Configuracion",
+        name: "Configuración",
         href: "/configuracion",
         icon: <Settings size={25} />,
     },
     { name: "Cerrar Sesión", href: "/login", icon: <LogOut size={25} /> },
+    
 ];
+
 
 export function Sidebar() {
     const { role, logout } = useAuth();
@@ -78,67 +54,47 @@ export function Sidebar() {
     );
 
     return (
-        <aside className="flex h-screen w-80 flex-col bg-[#0b1b2a] px-5 py-8">
-            <div className="mb-10 flex items-center justify-center">
-                <img src={logo} alt="Logo de Sara BI" className="h-40 w-auto" />
-            </div>
+    <aside className="flex h-screen w-80 flex-col bg-white px-5 py-8 justify-between border-r border-gray-200">
+        {/* Top logo */}
+        <div className="mb-10 flex items-center justify-center">
+            <img src={logoTop} alt="Logo de EciCare" className="h-20 w-auto" />
+        </div>
 
-            <nav className="flex-1">
-                <ul className="flex flex-col gap-y-3">
-                    {filteredMainNavItems.map((item) => (
-                        <li key={item.name}>
+        {/* Navigation */}
+        <nav className="flex-1">
+            <ul className="flex flex-col gap-y-8">
+                {filteredMainNavItems.map((item) => (
+                    <li key={item.name}>
+                        {item.name === "Cerrar Sesión" ? (
+                            <button
+                                onClick={logout}
+                                className="flex items-center gap-x-4 rounded-2xl px-2 py-2 text-[#333] font-semibold text-[1.1rem] hover:bg-[#f5f5f5] transition-all w-full"
+                            >
+                                {item.icon}
+                                <span>{item.name}</span>
+                            </button>
+                        ) : (
                             <NavLink
                                 to={item.href}
                                 className={({ isActive }) =>
-                                    `flex w-full items-center gap-x-4 rounded-lg p-4 text-[1rem] font-medium transition-colors
-                                    ${
-                                        isActive
-                                            ? "bg-[#152e46]"
-                                            : "text-gray-400 hover:bg-[#182535]"
-                                    }`
+                                    isActive
+                                        ? "flex items-center gap-x-4 rounded-2xl px-2 py-2 bg-[#d84239] text-white font-semibold text-[1.1rem] shadow transition-all"
+                                        : "flex items-center gap-x-4 rounded-2xl px-2 py-2 text-[#333] font-semibold text-[1.1rem] hover:bg-[#f5f5f5] transition-all"
                                 }
                             >
                                 {item.icon}
                                 <span>{item.name}</span>
                             </NavLink>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-
-            <div className="mt-auto">
-                <ul className="flex flex-col gap-y-3">
-                    {secondaryNavItems.map((item) => (
-                        <li key={item.name}>
-                            {item.name === "Cerrar Sesión" ? (
-                                <button
-                                    onClick={logout}
-                                    className="flex w-full items-center gap-x-4 rounded-lg p-4 text-lg font-medium text-gray-400 transition-colors hover:bg-[#4B1E1E] hover:text-white"
-                                >
-                                    {item.icon}
-                                    <span>{item.name}</span>
-                                </button>
-                            ) : (
-                                // Si no, renderiza el NavLink normal
-                                <NavLink
-                                    to={item.href}
-                                    className={({ isActive }) =>
-                                        `flex w-full items-center gap-x-4 rounded-lg p-4 text-lg font-medium transition-colors
-                                        ${
-                                            isActive
-                                                ? "bg-[#152e46]"
-                                                : "text-gray-400 hover:bg-[#182535]"
-                                        }`
-                                    }
-                                >
-                                    {item.icon}
-                                    <span>{item.name}</span>
-                                </NavLink>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </aside>
-    );
+                        )}
+                    </li>
+                ))}
+            </ul>
+        </nav>
+        
+        {/* Bottom logo */}
+        <div className="flex items-center justify-center mt-10">
+            <img src={logoBottom} alt="Logo inferior" className="h-40 w-auto" />
+        </div>
+    </aside>
+);
 }
