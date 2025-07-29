@@ -143,17 +143,17 @@ const Login: React.FC = () => {
                 <div className="mb-1 p-2">
                     <label
                         htmlFor="email"
-                        className="block mb-1 text-[#ffffff] font-bold text-[15px]"
+                        className="block mb-1 text-[#1E1E1E] font-bold text-[15px]"
                     >
                         Correo
                     </label>
                     <input
-                        className="w-full p-3 border border-[#bdc3c7] text-base text-[#000000] rounded-lg"
+                        className="w-full p-3 border border-[#bdc3c7] text-base text-[#1E1E1E] rounded-lg"
                         type="email"
                         id="email"
                         value={username}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="usuario@mail.escuela.edu.co"
+                        placeholder="usuario@mail.escuelaing.edu.co"
                         required
                     />
                 </div>
@@ -162,12 +162,12 @@ const Login: React.FC = () => {
                     {" "}
                     <label
                         htmlFor="password"
-                        className="block mb-1 text-[#ffffff] font-bold text-[15px]"
+                        className="block mb-1 text-[#1E1E1E] font-bold text-[15px]"
                     >
                         Contraseña
                     </label>
                     <input
-                        className="w-full p-3 border border-[#bdc3c7] rounded-lg text-base text-[#000000]"
+                        className="w-full p-3 border border-[#bdc3c7] rounded-lg text-base text-[#1E1E1E]"
                         type="password"
                         id="password"
                         value={password}
@@ -186,7 +186,7 @@ const Login: React.FC = () => {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="bg-blue-950 text-lg w-full p-3 rounded-lg font-medium hover:bg-opacity-90 transition"
+                    className="bg-[#0A47AA] text-lg text-white w-full p-3 rounded-lg font-medium hover:bg-opacity-90 transition"
                 >
                     {isLoading ? "Cargando..." : "Iniciar Sesión"}
                 </button>
@@ -194,7 +194,7 @@ const Login: React.FC = () => {
                 <div className="mt-6 text-center">
                     <Link
                         to="/forgot-password"
-                        className=" text-xs sm:text-base text-[#7aa6ff]"
+                        className=" text-xs sm:text-base text-[#0A47AA]"
                     >
                         ¿Olvidaste tu contraseña?
                     </Link>
