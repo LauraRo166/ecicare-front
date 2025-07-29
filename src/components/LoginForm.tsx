@@ -135,7 +135,7 @@ const Login: React.FC = () => {
                 <img
                     src={logo}
                     alt="Logo"
-                    className="block mx-auto w-auto h-[8rem]"
+                    className="block mx-auto w-auto h-[10rem]"
                 />
                 <h2 className="text-[20px] font-bold mt-4">Inicio de Sesión</h2>
             </div>
