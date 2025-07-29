@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+body {
+    color: #222;
 *,
 *::before,
 *::after {
