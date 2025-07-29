@@ -2,10 +2,6 @@
 
 body {
     color: #222;
-*,
-*::before,
-*::after {
-    font-family: "Poppins", sans-serif;
 }
 
 .app-container {

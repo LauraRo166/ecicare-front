@@ -1,6 +1,6 @@
 import "../styles/login.css";
 import LoginForm from "../components/LoginForm.tsx";
-import logoBlanco from "../assets/logo/logoBlanco.png";
+import logoBlanco from "../assets/logo/logo.png";
 
 export const Login = () => {
     return (

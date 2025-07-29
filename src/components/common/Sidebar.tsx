@@ -1,17 +1,12 @@
 import { NavLink } from "react-router-dom";
-import logoBottom from "@/assets/logo/logo2.jpg";
+import logoBottom from "@/assets/logo/logo2.png";
 import logoTop from "@/assets/logo/ecicare.png";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-    OctagonAlert,
     Settings,
-    Building,
-    Headset,
-    UserRoundCog,
     ChartSpline,
     LogOut,
     ChartPie,
-    FileChartColumn,
     Newspaper,
 } from "lucide-react";
 
