@@ -16,7 +16,6 @@ export const Challenge = ({ title, description, prize }: ChallengeProps) => {
 
     return (
         <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-4 mb-3 relative">
-            {/* Modales */}
             <EditChallengeModal
                 isOpen={isEdit}
                 onClose={() => setIsEdit(false)}
@@ -35,12 +34,10 @@ export const Challenge = ({ title, description, prize }: ChallengeProps) => {
                 }}
             />
 
-            {/* Acciones arriba a la derecha */}
             <div className="absolute top-3 right-3 flex gap-2">
                 <SectionActions onEdit={() => setIsEdit(true)} onDelete={() => setIsDelete(true)} />
             </div>
 
-            {/* Contenido */}
             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                 {title}
             </h3>
