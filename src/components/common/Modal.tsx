@@ -1,23 +1,34 @@
-import type { ReactNode } from "react";
+import React from "react";
+
 interface ModalProps {
-    open: boolean;
+    isOpen: boolean;
     onClose: () => void;
-    children: ReactNode;
+    title?: string;
+    children: React.ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
-    if (!open) return null;
+export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+    if (!isOpen) return null;
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm">
-            <div className="bg-white rounded-xl p-6 min-w-[320px] shadow-lg relative">
-                <button
-                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-                    onClick={onClose}
-                    aria-label="Cerrar modal"
-                >
-                    ×
-                </button>
-                {children}
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div
+                className="absolute inset-0 bg-black opacity-50"
+                onClick={onClose}
+            />
+
+            <div className="relative bg-white rounded-xl shadow-lg max-w-lg w-full p-6 z-10">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">{title}</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-500 hover:text-gray-700 text-lg"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                <div>{children}</div>
             </div>
         </div>
     );

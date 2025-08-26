@@ -1,13 +1,13 @@
 import { Modal } from "@/components/common/Modal.tsx";
 import { useState } from "react";
 
-interface DeleteChallengeModalProps {
+interface DeleteAwardModalProps {
     isOpen: boolean;
     onClose: () => void;
     onDelete: () => Promise<boolean>;
 }
 
-export const DeleteChallengeModal = ({ isOpen, onClose, onDelete }: DeleteChallengeModalProps) => {
+export const DeleteAwardModal = ({ isOpen, onClose, onDelete }: DeleteAwardModalProps) => {
     const [status, setStatus] = useState<null | "success" | "error">(null);
 
     const handleDelete = async () => {
@@ -20,10 +20,10 @@ export const DeleteChallengeModal = ({ isOpen, onClose, onDelete }: DeleteChalle
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={() => { onClose(); setStatus(null); }} title="Eliminar reto">
+        <Modal isOpen={isOpen} onClose={() => { onClose(); setStatus(null); }} title="Eliminar premio">
             {status === null && (
                 <>
-                    <p className="mb-4">¿Está seguro que desea eliminar el reto?</p>
+                    <p className="mb-4">¿Está seguro que desea eliminar el premio?</p>
                     <div className="flex justify-between">
                         <button
                             type="button"
@@ -42,10 +42,10 @@ export const DeleteChallengeModal = ({ isOpen, onClose, onDelete }: DeleteChalle
                 </>
             )}
             {status === "success" && (
-                <p className="text-green-600 font-semibold">Reto eliminado exitosamente ✅</p>
+                <p className="text-green-600 font-semibold">Premio eliminado exitosamente ✅</p>
             )}
             {status === "error" && (
-                <p className="text-red-600 font-semibold">Error al eliminar el reto ❌</p>
+                <p className="text-red-600 font-semibold">Error al eliminar el premio ❌</p>
             )}
         </Modal>
     );

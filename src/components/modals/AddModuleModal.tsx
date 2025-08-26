@@ -1,4 +1,4 @@
-import { Modal } from "@/components/Modal.tsx";
+import { Modal } from "@/components/common/Modal.tsx";
 
 interface AddModuleModalProps {
     isOpen: boolean;

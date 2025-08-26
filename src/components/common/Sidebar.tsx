@@ -7,7 +7,7 @@ import {
     ChartSpline,
     LogOut,
     ChartPie,
-    Newspaper,
+    Trophy,
 } from "lucide-react";
 
 // top itens
@@ -26,7 +26,7 @@ const mainNavItems = [
     {
         name: "Premios",
         href: "/premios",
-        icon: <Newspaper size={25} />,
+        icon: <Trophy size={25} />,
         allowedRoles: ["ADMIN"],
     },
     {
