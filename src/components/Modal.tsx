@@ -12,15 +12,12 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            {/* Fondo oscuro */}
             <div
                 className="absolute inset-0 bg-black opacity-50"
                 onClick={onClose}
             />
 
-            {/* Contenido del modal */}
             <div className="relative bg-white rounded-xl shadow-lg max-w-lg w-full p-6 z-10">
-                {/* Header */}
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">{title}</h2>
                     <button
@@ -31,7 +28,6 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                     </button>
                 </div>
 
-                {/* Contenido */}
                 <div>{children}</div>
             </div>
         </div>
