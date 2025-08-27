@@ -3,7 +3,7 @@ import { Challenge } from "@/components/Challenge";
 
 export const DashboardModules = () => {
     return (
-        <div className="min-h-screen w-full bg-[#fceceb] p-0">
+        <div className="min-h-screen w-full bg-[#fceceb] px-10">
             <AccordionModule title="Bienestar físico y nutricional">
                 <Challenge title="Prueba" description="Un reto de ejemplo" prize="Abrazos" />
             </AccordionModule>
