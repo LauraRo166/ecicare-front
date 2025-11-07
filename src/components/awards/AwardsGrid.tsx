@@ -1,9 +1,10 @@
-import {AwardCard} from "@/components/AwardsCard.tsx";
+import {AwardCard} from "@/components/awards/AwardsCard.tsx";
+import type {AwardData} from "@/types/awardData.ts";
 
 interface AwardsGridProps {
-    awards: { id: number; name: string; image: unknown }[];
-    onEdit: (award: { id: number; name: string; image: unknown }) => void;
-    onDelete: (award: { id: number; name: string; image: unknown }) => void;
+    awards: AwardData[];
+    onEdit: (award: AwardData) => void;
+    onDelete: (award: AwardData) => void;
 }
 
 export const AwardsGrid = ({ awards, onEdit, onDelete }: AwardsGridProps) => {
@@ -11,7 +12,7 @@ export const AwardsGrid = ({ awards, onEdit, onDelete }: AwardsGridProps) => {
         <div className="grid grid-cols-4 gap-6">
             {awards.map((award) => (
                 <AwardCard
-                    key={award.id}
+                    key={award.name}
                     award={award}
                     onEdit={() => onEdit(award)}
                     onDelete={() => onDelete(award)}

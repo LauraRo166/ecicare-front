@@ -28,13 +28,13 @@ export const DeleteAwardModal = ({ isOpen, onClose, onDelete }: DeleteAwardModal
                         <button
                             type="button"
                             onClick={onClose}
-                            className="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-400"
+                            className="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-100"
                         >
                             Cancelar
                         </button>
                         <button
                             onClick={handleDelete}
-                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-100"
                         >
                             Confirmar
                         </button>
@@ -42,10 +42,10 @@ export const DeleteAwardModal = ({ isOpen, onClose, onDelete }: DeleteAwardModal
                 </>
             )}
             {status === "success" && (
-                <p className="text-green-600 font-semibold">Premio eliminado exitosamente ✅</p>
+                <p className="text-green-600 font-semibold">Premio eliminado exitosamente</p>
             )}
             {status === "error" && (
-                <p className="text-red-600 font-semibold">Error al eliminar el premio ❌</p>
+                <p className="text-red-600 font-semibold">Error al eliminar el premio</p>
             )}
         </Modal>
     );

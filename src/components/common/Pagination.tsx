@@ -4,7 +4,7 @@ interface AwardsPaginationProps {
     onPageChange: (page: number) => void;
 }
 
-export const AwardsPagination = ({ page, totalPages, onPageChange }: AwardsPaginationProps) => {
+export const Pagination = ({ page, totalPages, onPageChange }: AwardsPaginationProps) => {
     return (
         <div className="flex justify-center items-center mt-8 gap-2">
             <button

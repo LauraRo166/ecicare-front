@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { DashboardModules } from "@/components/dashboards/DashboardModules.tsx";
-import { SectionActions } from "@/components/SectionActions.tsx";
-import { DashboardHeader } from "@/components/common/DashboardHeader.tsx";
-import { useAuth } from "@/contexts/AuthContext.tsx";
-import { AddModuleModal } from "@/components/modals/AddModuleModal.tsx";
+import { SectionActions } from "@/components/common/SectionActions.tsx";
+import { Header } from "@/components/common/Header.tsx";
+import { AddModuleModal } from "@/components/modules/AddModuleModal.tsx";
+
+import type {ModuleData} from "@/types/moduleData.ts";
 
 export const ModulesPage = () => {
-    const { logout } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newModule, setNewModule] = useState<ModuleData | undefined>(undefined);
 
     return (
         <div className="flex flex-col h-screen w-full">
             <div className="min-h-screen w-full bg-[#fceceb] p-0">
                 {/* Header */}
-                <DashboardHeader title="Administrador" onLogout={logout} />
+                <Header title="Administrador" />
 
                 {/* Acciones */}
                 <div className="flex gap-4 px-8 py-4 justify-center">
@@ -24,12 +25,13 @@ export const ModulesPage = () => {
                 </div>
 
                 {/* Módulos */}
-                <DashboardModules />
+                <DashboardModules newModule={newModule}/>
 
                 {/* Modal */}
                 <AddModuleModal
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
+                    onAdd={(module) => setNewModule(module)}
                 />
             </div>
         </div>

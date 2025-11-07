@@ -3,19 +3,19 @@ import logoBottom from "@/assets/logo/logo2.png";
 import logoTop from "@/assets/logo/ecicare.png";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-    Settings,
     ChartSpline,
     LogOut,
-    ChartPie,
+    Users,
     Trophy,
 } from "lucide-react";
 
-// top itens
+// top items
 const mainNavItems = [
     {
-        name: "Métricas",
-        href: "/metricas",
-        icon: <ChartPie size={25} />,
+        name: "Estudiantes",
+        href: "/estudiantes",
+        icon: <Users size={25} />,
+        allowedRoles: ["ADMIN"],
     },
     {
         name: "Módulos",
@@ -28,11 +28,6 @@ const mainNavItems = [
         href: "/premios",
         icon: <Trophy size={25} />,
         allowedRoles: ["ADMIN"],
-    },
-    {
-        name: "Configuración",
-        href: "/configuracion",
-        icon: <Settings size={25} />,
     },
     { name: "Cerrar Sesión", href: "/login", icon: <LogOut size={25} /> },
     

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo/logo2.png";
-import { useAuth } from "../contexts/AuthContext";
-import type { LoginResponse } from "../types/loginResponse";
-import type { User } from "../types/user";
-import logoBlanco from "../assets/logo/logo.png";
+import logo from "../../assets/logo/logo2.png";
+import { useAuth } from "../../contexts/AuthContext.tsx";
+import type { LoginResponse } from "../../types/loginResponse.ts";
+import type { User } from "../../types/user.ts";
+import logoBlanco from "../../assets/logo/logo.png";
 
 const Login: React.FC = () => {
     const [username, setEmail] = useState<string>("");
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
 
             // 3. Llama a tu contexto de autenticación y redirige
             login(user, token);
-            navigate("/metricas");
+            navigate("/estudiantes");
         } else {
             setError(
                 "Credenciales incorrectas. Intenta con las credenciales locales."
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
 
             // 3. Llama a tu contexto de autenticación y redirige
             login(user, token);
-            navigate("/metricas");
+            navigate("/estudiantes");
         } else {
             setError(
                 "Credenciales incorrectas. Intenta con las credenciales locales."
