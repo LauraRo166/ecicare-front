@@ -12,7 +12,7 @@ export const DashboardStudents = () => {
         const fetchChallenges = async () => {
             try {
                 const allChallenges = await getChallenges()
-                setChallenges(allChallenges?.map((c: any) => c.name) ?? [])
+                setChallenges(allChallenges?.map((c) => c.name) ?? [])
             } catch (err) {
                 console.error("Error al cargar los retos:", err)
             }

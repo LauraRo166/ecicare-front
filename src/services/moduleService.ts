@@ -29,7 +29,7 @@ export const getAllModules = async (
     size?: number,
     view?: string
 ) => {
-    const params: Record<string, any> = {}
+    const params: Record<string, unknown> = {}
     if (page !== undefined && size !== undefined) {
         params.page = page
         params.size = size
@@ -46,7 +46,7 @@ export const getAllModules = async (
  * Obtener módulos generales (paginados)
  */
 export const getAllGenModules = async (page = 0, size = 10, view?: string) => {
-    const params: Record<string, any> = { page, size }
+    const params: Record<string, unknown> = { page, size }
     if (view) params.view = view
 
     const response = await apiClient.get("/modules/gen-modules", { params })

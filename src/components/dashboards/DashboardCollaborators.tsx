@@ -27,14 +27,14 @@ export const DashboardCollaborators = () => {
             }
 
             await createEcicareUser(user)
-            setMessage("✅ Colaborador creado exitosamente")
+            setMessage("Colaborador creado exitosamente")
             setIdEci("")
             setName("")
             setEmail("")
             setPassword("")
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err)
-            setError("❌ Error al crear el colaborador. Verifica los datos o si el usuario ya existe.")
+            setError("Error al crear el colaborador. Verifica los datos o si el usuario ya existe.")
         } finally {
             setLoading(false)
         }

@@ -74,7 +74,7 @@ export const AssignRedeemableModal = ({
             onSave?.(enriched);
             onClose();
         } catch (error) {
-            alert("No se pudo guardar el redimible. Intenta nuevamente.");
+            alert("No se pudo guardar el redimible. Intenta nuevamente. Error: " + error);
         } finally {
             setLoading(false);
         }
