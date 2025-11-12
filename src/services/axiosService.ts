@@ -4,7 +4,7 @@ import axios from 'axios';
 // Client build
 const apiClient = axios.create({
   // Recuerda crear un archivo .env con: VITE_API_URL=http://localhost:3000/api
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "http://localhost:8080/api",
   headers: {
     'Content-Type': 'application/json',
   },

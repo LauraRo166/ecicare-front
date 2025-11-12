@@ -1,72 +1,43 @@
 import { NavLink } from "react-router-dom";
-import logo from "@/assets/logo/logo.png";
+import logoBottom from "@/assets/logo/logo2.png";
+import logoTop from "@/assets/logo/ecicare.png";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-    OctagonAlert,
-    Settings,
-    Building,
-    Headset,
-    UserRoundCog,
     ChartSpline,
     LogOut,
-    ChartPie,
-    FileChartColumn,
-    Newspaper,
+    Users,
+    Trophy,
+    UserPlus,
 } from "lucide-react";
 
-// top itens
 const mainNavItems = [
     {
-        name: "Dashboard",
-        href: "/dashboard",
-        icon: <ChartPie size={25} />,
-    },
-    {
-        name: "Ranking",
-        href: "/ranking",
+        name: "Módulos",
+        href: "/modulos",
         icon: <ChartSpline size={25} />,
-        allowedRoles: ["EMPLOYEER"],
+        allowedRoles: ["ADMINISTRATION", "COLLABORATOR"],
     },
     {
-        name: "Gestion de Contenido",
-        href: "/contenido",
-        icon: <Newspaper size={25} />,
-        allowedRoles: ["ADMIN"],
+        name: "Premios",
+        href: "/premios",
+        icon: <Trophy size={25} />,
+        allowedRoles: ["ADMINISTRATION"],
     },
     {
-        name: "Gestion de Empresas",
-        href: "/empresas",
-        icon: <Building size={25} />,
-        allowedRoles: ["ADMIN"],
+        name: "Estudiantes",
+        href: "/estudiantes",
+        icon: <Users size={25} />,
+        allowedRoles: ["ADMINISTRATION", "COLLABORATOR"],
     },
     {
-        name: "Gestion de Usuarios",
-        href: "/usuarios",
-        icon: <UserRoundCog size={25} />,
-    },
-    {
-        name: "Alertas",
-        href: "/alertas",
-        icon: <OctagonAlert size={25} />,
-        allowedRoles: ["EMPLOYEER"],
-    },
-    {
-        name: "Reportes",
-        href: "/reportes",
-        icon: <FileChartColumn size={25} />,
-    },
-];
-
-// bottom items
-const secondaryNavItems = [
-    { name: "Soporte", href: "/soporte", icon: <Headset size={25} /> },
-    {
-        name: "Configuracion",
-        href: "/configuracion",
-        icon: <Settings size={25} />,
+        name: "Colaboradores",
+        href: "/colaboradores",
+        icon: <UserPlus size={25} />,
+        allowedRoles: ["ADMINISTRATION"],
     },
     { name: "Cerrar Sesión", href: "/login", icon: <LogOut size={25} /> },
 ];
+
 
 export function Sidebar() {
     const { role, logout } = useAuth();
@@ -74,61 +45,40 @@ export function Sidebar() {
     const filteredMainNavItems = mainNavItems.filter(
         (item) =>
             !item.allowedRoles ||
-            (role !== null && item.allowedRoles.includes(role))
+            (role && item.allowedRoles.includes(role))
     );
 
     return (
-        <aside className="flex h-screen w-80 flex-col bg-[#0b1b2a] px-5 py-8">
+        <aside className="flex h-screen w-80 flex-col bg-white px-5 py-8 justify-between border-r border-gray-200">
+            {/* Logo superior */}
             <div className="mb-10 flex items-center justify-center">
-                <img src={logo} alt="Logo de Sara BI" className="h-40 w-auto" />
+                <img
+                    src={logoTop}
+                    alt="Logo de EciCare"
+                    className="h-20 w-auto"
+                />
             </div>
 
+            {/* Navegación principal */}
             <nav className="flex-1">
-                <ul className="flex flex-col gap-y-3">
+                <ul className="flex flex-col gap-y-8">
                     {filteredMainNavItems.map((item) => (
-                        <li key={item.name}>
-                            <NavLink
-                                to={item.href}
-                                className={({ isActive }) =>
-                                    `flex w-full items-center gap-x-4 rounded-lg p-4 text-[1rem] font-medium transition-colors
-                                    ${
-                                        isActive
-                                            ? "bg-[#152e46]"
-                                            : "text-gray-400 hover:bg-[#182535]"
-                                    }`
-                                }
-                            >
-                                {item.icon}
-                                <span>{item.name}</span>
-                            </NavLink>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-
-            <div className="mt-auto">
-                <ul className="flex flex-col gap-y-3">
-                    {secondaryNavItems.map((item) => (
                         <li key={item.name}>
                             {item.name === "Cerrar Sesión" ? (
                                 <button
                                     onClick={logout}
-                                    className="flex w-full items-center gap-x-4 rounded-lg p-4 text-lg font-medium text-gray-400 transition-colors hover:bg-[#4B1E1E] hover:text-white"
+                                    className="flex items-center gap-x-4 rounded-2xl px-2 py-2 text-[#333] font-semibold text-[1.1rem] hover:bg-[#f5f5f5] transition-all w-full"
                                 >
                                     {item.icon}
                                     <span>{item.name}</span>
                                 </button>
                             ) : (
-                                // Si no, renderiza el NavLink normal
                                 <NavLink
                                     to={item.href}
                                     className={({ isActive }) =>
-                                        `flex w-full items-center gap-x-4 rounded-lg p-4 text-lg font-medium transition-colors
-                                        ${
-                                            isActive
-                                                ? "bg-[#152e46]"
-                                                : "text-gray-400 hover:bg-[#182535]"
-                                        }`
+                                        isActive
+                                            ? "flex items-center gap-x-4 rounded-2xl px-2 py-2 bg-[#d84239] text-white font-semibold text-[1.1rem] shadow transition-all"
+                                            : "flex items-center gap-x-4 rounded-2xl px-2 py-2 text-[#333] font-semibold text-[1.1rem] hover:bg-[#f5f5f5] transition-all"
                                     }
                                 >
                                     {item.icon}
@@ -138,6 +88,15 @@ export function Sidebar() {
                         </li>
                     ))}
                 </ul>
+            </nav>
+
+            {/* Logo inferior */}
+            <div className="flex items-center justify-center mt-10">
+                <img
+                    src={logoBottom}
+                    alt="Logo inferior"
+                    className="h-40 w-auto"
+                />
             </div>
         </aside>
     );
