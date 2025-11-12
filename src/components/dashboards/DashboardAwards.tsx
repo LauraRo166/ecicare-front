@@ -1,38 +1,79 @@
-import { useState } from "react";
-import { DeleteAwardModal } from "@/components/modals/DeleteAwardModal";
-import { EditAwardModal } from "@/components/modals/EditAwardModal";
-import { AwardsPagination } from "@/components/AwardsPagination.tsx";
-import { AwardsGrid } from "@/components/AwardsGrid.tsx"
+import { useEffect, useState } from "react";
+import { DeleteAwardModal } from "@/components/awards/DeleteAwardModal.tsx";
+import { EditAwardModal } from "@/components/awards/EditAwardModal.tsx";
+import { Pagination } from "@/components/common/Pagination.tsx";
+import { AwardsGrid } from "@/components/awards/AwardsGrid.tsx";
+import type { AwardData } from "@/types/awardData.ts";
+import { getAwards, getAwardsTotal, deleteAward } from "@/services/awardService";
 
 const PAGE_SIZE = 8;
-const initialAwards = [
-    { id: 1, name: "Premio", image: null },
-    { id: 2, name: "Premio", image: null },
-    { id: 3, name: "Premio", image: null },
-    { id: 4, name: "Premio", image: null },
-    { id: 5, name: "Premio", image: null },
-    { id: 6, name: "Premio", image: null },
-    { id: 7, name: "Premio", image: null },
-    { id: 8, name: "Premio", image: null },
-    { id: 9, name: "Premio", image: null },
-];
 
-export const DashboardAwards = () => {
-    const [awards] = useState(initialAwards);
+interface DashboardAwardsProps {
+    newAward?: AwardData;
+}
+
+export const DashboardAwards = ({ newAward }: DashboardAwardsProps) => {
+    const [awards, setAwards] = useState<AwardData[]>([]);
     const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
-    const [selectedAward, setSelectedAward] = useState<{ id: number; name: string; image: unknown } | null>(null);
+    const [selectedAward, setSelectedAward] = useState<AwardData | undefined>(undefined);
 
-    const totalPages = Math.ceil(awards.length / PAGE_SIZE);
-    const awardsPage = awards.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+    useEffect(() => {
+        const fetchAwards = async () => {
+            try {
+                const data = await getAwards(page, PAGE_SIZE);
+                setAwards(data);
+            } catch (error) {
+                console.error("Error cargando premios:", error);
+            }
+        };
+
+        const fetchTotalAwards = async () => {
+            try {
+                const total = await getAwardsTotal();
+                setTotalPages(Math.ceil(total / PAGE_SIZE));
+            } catch (error) {
+                console.error("Error obteniendo total de premios:", error);
+            }
+        };
+
+        fetchAwards();
+        fetchTotalAwards();
+    }, [page]);
+
+    useEffect(() => {
+        if (newAward) {
+            setAwards((prev) => [newAward, ...prev]);
+        }
+    }, [newAward]);
+
+    const handleUpdateAward = (updated: AwardData) => {
+        setAwards((prev) =>
+            prev.map(a => (a.id === updated.id ? updated : a))
+        );
+    };
+
+    const handleDelete = async () => {
+        if (!selectedAward) return false;
+        try {
+            await deleteAward(selectedAward.id);
+            setAwards(prev => prev.filter(a => a.id !== selectedAward.id));
+            setShowDelete(false);
+            return true;
+        } catch (error) {
+            console.error("Error eliminando premio:", error);
+            return false;
+        }
+    };
 
     return (
         <div className="min-h-screen w-full bg-[#fceceb] flex flex-col">
             <div className="px-10 flex-1">
-                {/* Grid de premios */}
                 <AwardsGrid
-                    awards={awardsPage}
+                    awards={awards}
                     onEdit={(award) => {
                         setSelectedAward(award);
                         setShowEdit(true);
@@ -43,26 +84,26 @@ export const DashboardAwards = () => {
                     }}
                 />
 
-                <AwardsPagination
+                <Pagination
                     page={page}
                     totalPages={totalPages}
                     onPageChange={setPage}
                 />
             </div>
 
-            <EditAwardModal
-                isOpen={showEdit}
-                onClose={() => setShowEdit(false)}
-                selectedAward={selectedAward}
-            />
+            {selectedAward && (
+                <EditAwardModal
+                    isOpen={showEdit}
+                    onClose={() => setShowEdit(false)}
+                    selectedAward={selectedAward}
+                    onUpdate={handleUpdateAward}
+                />
+            )}
 
             <DeleteAwardModal
                 isOpen={showDelete}
                 onClose={() => setShowDelete(false)}
-                onDelete={async () => {
-                    console.log("Eliminar reto");
-                    return true;
-                }}
+                onDelete={handleDelete}
             />
         </div>
     );

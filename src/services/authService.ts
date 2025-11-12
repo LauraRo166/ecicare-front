@@ -23,7 +23,7 @@ export async function login(
             id: "user-local-123",
             name: "Usuario de Prueba Local",
             email: "local@test.com",
-            role: "ADMIN",
+            role: "ADMINISTRATION",
         };
     }
     if (email === "local2@test.co" && password === "local2") {
@@ -36,7 +36,7 @@ export async function login(
             id: "user-local",
             name: "Usuario de prueba",
             email: "local2@test.com",
-            role: "EMPLOYEER",
+            role: "COLLABORATOR",
         };
     }
     const API_AUTH_URL = "http://tu-api.com/auth";
