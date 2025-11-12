@@ -1,4 +1,4 @@
-export type Role = "ADMINISTRATION" | "STUDENT" | "PROFESSOR";
+export type Role = "ADMINISTRATION" | "STUDENT" | "PROFESSOR" | "COLLABORATOR";
 
 export interface UserEcicareDto {
   idEci?: number;

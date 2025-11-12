@@ -3,6 +3,7 @@ import type { ChallengeData } from "@/types/challengeData";
 import type { RedeemableData } from "@/types/redeemableData";
 import { RedeemablesList } from "@/components/redeemables/RedeemableList";
 import { AssignRedeemableModal } from "@/components/redeemables/AssignRedeemableModal";
+import { deleteRedeemable } from "@/services/redeemableService";
 
 interface ChallengeFormProps {
     initialData?: ChallengeData;
@@ -21,7 +22,7 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
             duration: "",
             goals: [],
             moduleName: "",
-            redeemables: []
+            redeemables: [],
         }
     );
 
@@ -53,6 +54,34 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
         };
         setForm(updatedChallenge);
         onSubmit(updatedChallenge);
+    };
+
+    const handleDeleteRedeemable = async (redeemable: RedeemableData) => {
+        if (!form.name) {
+            console.warn("No hay nombre de reto (form.name) — no se puede eliminar en backend");
+            alert("El reto no tiene nombre. Guarda el reto antes de eliminar premios.");
+            return;
+        }
+        if (!redeemable.awardId && redeemable.awardId !== 0) {
+            console.warn("awardId inválido:", redeemable.awardId);
+            alert("El premio no tiene ID válido.");
+            return;
+        }
+
+        try {
+            await deleteRedeemable(form.name, redeemable.awardId);
+
+            const updated = {
+                ...form,
+                redeemables: form.redeemables?.filter((r) => r.awardId !== redeemable.awardId),
+            };
+            setForm(updated);
+            onSubmit(updated);
+        } catch (error: never) {
+            console.error("Error al eliminar el redimible:", error);
+            const msg = error?.response?.data?.message || error?.message || "Error desconocido";
+            alert("No se pudo eliminar el premio: " + msg);
+        }
     };
 
     return (
@@ -121,7 +150,10 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
                 {isChallengeCreated ? (
                     <>
                         {form.redeemables && form.redeemables.length > 0 ? (
-                            <RedeemablesList redeemables={form.redeemables} />
+                            <RedeemablesList
+                                redeemables={form.redeemables}
+                                onDelete={handleDeleteRedeemable}
+                            />
                         ) : (
                             <p className="text-gray-500 italic">Este reto no tiene premios relacionados.</p>
                         )}
@@ -149,21 +181,12 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
                     Cancelar
                 </button>
 
-                {!isChallengeCreated ? (
-                    <button
-                        type="submit"
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                    >
-                        Crear reto
-                    </button>
-                ) : (
-                    <button
-                        type="submit"
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                    >
-                        Guardar cambios
-                    </button>
-                )}
+                <button
+                    type="submit"
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                >
+                    {isChallengeCreated ? "Guardar cambios" : "Crear reto"}
+                </button>
             </div>
 
             {isRedeemableModalOpen && (

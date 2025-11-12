@@ -1,30 +1,59 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ProtectedRoute } from "./components/auth/ProtectedRoute.tsx";
-import { Login } from "./pages/LoginPage.tsx";
-import { DashboardLayout } from "./components/dashboards/DashboardLayout.tsx";
-import { StudentsPage } from "./pages/StudentsPage.tsx";
-import { ConfigurationPage } from "./pages/ConfigurationPage.tsx";
-import { ModulesPage } from "./pages/ModulesPage.tsx";
-import { AwardsPage } from "./pages/AwardsPage.tsx";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Login } from "@/pages/LoginPage";
+import { DashboardLayout } from "@/components/dashboards/DashboardLayout";
+import { StudentsPage } from "@/pages/StudentsPage";
+import { CollaboratorsPage } from "@/pages/CollaboratorsPage";
+import { ModulesPage } from "@/pages/ModulesPage";
+import { AwardsPage } from "@/pages/AwardsPage"
+import { UnauthorizedPage } from "@/pages/UnauthorizedPage.tsx";
 
 export const AppRoutes = () => (
     <Routes>
         {/* Redirecciones */}
-        <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
 
         {/* Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Rutas protegidas con layout */}
-        <Route element={<DashboardLayout />}>
-            <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
-                <Route path="/estudiantes" element={<StudentsPage />} />
-                <Route path="/modulos" element={<ModulesPage />} />
-                <Route path="/premios" element={<AwardsPage />} />
-                <Route path="/configuracion" element={<ConfigurationPage />} />
+        {/* Página de acceso denegado */}
+        <Route path="/unauthorized" element={<UnauthorizedPage/>} />
 
-            </Route>
+        {/* Rutas protegidas */}
+        <Route element={<DashboardLayout />}>
+            <Route
+                path="/estudiantes"
+                element={
+                    <ProtectedRoute allowedRoles={["ADMINISTRATION", "COLLABORATOR"]}>
+                        <StudentsPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/modulos"
+                element={
+                    <ProtectedRoute allowedRoles={["ADMINISTRATION", "COLLABORATOR"]}>
+                        <ModulesPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/premios"
+                element={
+                    <ProtectedRoute allowedRoles={["ADMINISTRATION"]}>
+                        <AwardsPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/colaboradores"
+                element={
+                    <ProtectedRoute allowedRoles={["ADMINISTRATION"]}>
+                        <CollaboratorsPage />
+                    </ProtectedRoute>
+                }
+            />
         </Route>
     </Routes>
 );

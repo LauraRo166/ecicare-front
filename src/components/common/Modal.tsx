@@ -16,8 +16,10 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                 className="absolute inset-0 bg-black opacity-50"
                 onClick={onClose}
             />
-
-            <div className="relative bg-white rounded-xl shadow-lg max-w-lg w-full p-6 z-10">
+            <div
+                className="relative bg-white rounded-xl shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 z-10"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">{title}</h2>
                     <button
@@ -31,5 +33,6 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                 <div>{children}</div>
             </div>
         </div>
+
     );
 };

@@ -39,7 +39,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
 
                                 const redeemables: RedeemableData[] = (awards ?? []).map(a => ({
                                     challengeName: c.name,
-                                    awardId: a.id,
+                                    awardId: a.awardId,
                                     name: a.name,
                                     description: a.description,
                                     inStock: a.inStock,

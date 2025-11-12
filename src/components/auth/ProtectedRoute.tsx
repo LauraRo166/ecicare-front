@@ -1,18 +1,25 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext.tsx";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import type { JSX } from "react";
 
 interface ProtectedRouteProps {
-    allowedRoles: string[];
+    children: JSX.Element;
+    allowedRoles?: string[];
 }
 
-export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     const { isAuthenticated, role } = useAuth();
 
+    // Si no está autenticado, redirige al login
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
-    const isAllowed = role ? allowedRoles.includes(role) : false;
+    // Si hay restricción de rol y el rol no coincide
+    if (allowedRoles && (!role || !allowedRoles.includes(role))) {
+        return <Navigate to="/unauthorized" replace />;
+    }
 
-    return isAllowed ? <Outlet /> : <Navigate to="/Login" replace />;
+    // Si pasa todas las condiciones, muestra la página
+    return children;
 };

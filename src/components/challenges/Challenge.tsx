@@ -119,7 +119,7 @@ export const Challenge = ({ challenge, onUpdate, onDelete }: ChallengeProps) => 
                                 <ul className="list-disc list-inside mt-1">
                                     {challenge.redeemables?.map((r, idx) => (
                                         <li key={idx}>
-                                            {r.name} {r.limitDays ? `(${r.limitDays} días límite)` : ""}
+                                            {r.name}
                                         </li>
                                     ))}
                                 </ul>

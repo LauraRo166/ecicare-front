@@ -35,7 +35,7 @@ const Login: React.FC = () => {
                 id: "user-local-123",
                 email: "local@test.com",
                 name: "Usuario de Prueba",
-                role: "ADMIN",
+                role: "COLLABORATOR",
             };
 
             // 2. Procesa la respuesta falsa como si fuera real
@@ -68,7 +68,7 @@ const Login: React.FC = () => {
                 id: "user-local-123",
                 email: "local@test.com",
                 name: "Usuario de Prueba",
-                role: "ADMIN",
+                role: "ADMINISTRATION",
             };
 
             // 2. Procesa la respuesta falsa como si fuera real

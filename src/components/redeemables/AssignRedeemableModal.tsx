@@ -22,7 +22,7 @@ export const AssignRedeemableModal = ({
                                       }: AssignRedeemableModalProps) => {
     const [awards, setAwards] = useState<AwardData[]>([]);
     const [selectedAwardId, setSelectedAwardId] = useState<number | "">(
-        existingRedeemable?.awardId ?? ""
+        existingRedeemable?.id ?? ""
     );
     const [limitDays, setLimitDays] = useState<number>(
         existingRedeemable?.limitDays ?? 7
@@ -60,18 +60,26 @@ export const AssignRedeemableModal = ({
             };
 
             const saved = existingRedeemable
-                ? await updateRedeemable(challengeName, existingRedeemable.awardId, dto)
+                ? await updateRedeemable(challengeName, existingRedeemable.id, dto)
                 : await createRedeemable(dto);
 
-            onSave?.(saved);
+            const selectedAward = awards.find(a => a.id === Number(selectedAwardId));
+            const enriched = {
+                ...saved,
+                name: selectedAward?.name,
+                description: selectedAward?.description,
+                imageUrl: selectedAward?.imageUrl,
+            };
+
+            onSave?.(enriched);
             onClose();
         } catch (error) {
-            console.error("Error guardando redimible:", error);
             alert("No se pudo guardar el redimible. Intenta nuevamente.");
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <Modal

@@ -67,3 +67,13 @@ export const addUserToChallenge = async (userEmail: string, name: string): Promi
 export const confirmUserInChallenge = async (userEmail: string, name: string): Promise<void> => {
     await apiClient.put(`/challenges/users/${encodeURIComponent(userEmail)}/challenges/${encodeURIComponent(name)}/confirm`);
 };
+
+export const getAllChallenges = async () => {
+    const response = await apiClient.get("/challenges/");
+    return response.data;
+};
+
+export const getRegisteredUsersByChallenge = async (challengeName: string) => {
+    const response = await apiClient.get(`/challenges/${encodeURIComponent(challengeName)}/registered-users`);
+    return response.data;
+};

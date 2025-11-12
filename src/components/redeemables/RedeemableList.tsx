@@ -2,9 +2,10 @@ import type { RedeemableData } from "@/types/redeemableData";
 
 interface RedeemablesListProps {
     redeemables?: RedeemableData[];
+    onDelete?: (redeemable: RedeemableData) => void;
 }
 
-export const RedeemablesList = ({ redeemables }: RedeemablesListProps) => {
+export const RedeemablesList = ({ redeemables, onDelete }: RedeemablesListProps) => {
     if (!redeemables || redeemables.length === 0) {
         return <p>Este reto no tiene premios relacionados.</p>;
     }
@@ -14,8 +15,22 @@ export const RedeemablesList = ({ redeemables }: RedeemablesListProps) => {
             {redeemables.map((r, index) => (
                 <div
                     key={r.awardId ?? r.name ?? index}
-                    className="border p-2 rounded-lg flex items-center gap-3"
+                    className="relative border p-3 rounded-lg flex items-center gap-3 bg-white shadow-sm"
                 >
+                    {onDelete && (
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete(r);
+                            }}
+                            className="absolute top-1 right-1 text-gray-400 hover:text-red-500 text-lg font-bold"
+                            title="Eliminar redimible"
+                        >
+                            ✕
+                        </button>
+                    )}
+
                     {r.imageUrl ? (
                         <img
                             src={r.imageUrl}
