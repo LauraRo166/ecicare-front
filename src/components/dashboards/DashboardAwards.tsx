@@ -52,15 +52,15 @@ export const DashboardAwards = ({ newAward }: DashboardAwardsProps) => {
 
     const handleUpdateAward = (updated: AwardData) => {
         setAwards((prev) =>
-            prev.map(a => (a.id === updated.id ? updated : a))
+            prev.map(a => (a.awardId === updated.awardId ? updated : a))
         );
     };
 
     const handleDelete = async () => {
         if (!selectedAward) return false;
         try {
-            await deleteAward(selectedAward.id);
-            setAwards(prev => prev.filter(a => a.id !== selectedAward.id));
+            await deleteAward(selectedAward.awardId);
+            setAwards(prev => prev.filter(a => a.awardId !== selectedAward.awardId));
             setShowDelete(false);
             return true;
         } catch (error) {

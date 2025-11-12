@@ -22,7 +22,7 @@ export const createAward = async (award: AwardData): Promise<AwardData> => {
 };
 
 export const updateAward = async (award: AwardData): Promise<AwardData> => {
-    const response = await apiClient.put(`/awards/${award.id}`, award);
+    const response = await apiClient.put(`/awards/${award.awardId}`, award);
     return response.data;
 };
 

@@ -22,7 +22,7 @@ export const AssignRedeemableModal = ({
                                       }: AssignRedeemableModalProps) => {
     const [awards, setAwards] = useState<AwardData[]>([]);
     const [selectedAwardId, setSelectedAwardId] = useState<number | "">(
-        existingRedeemable?.id ?? ""
+        existingRedeemable?.awardId ?? ""
     );
     const [limitDays, setLimitDays] = useState<number>(
         existingRedeemable?.limitDays ?? 7
@@ -33,7 +33,7 @@ export const AssignRedeemableModal = ({
         const fetchAwards = async () => {
             try {
                 const data = await getAwards(1, 50);
-                setAwards(data.filter((a) => a.id !== undefined));
+                setAwards(data.filter((a) => a.awardId !== undefined));
             } catch (error) {
                 console.error("Error cargando premios:", error);
             }
@@ -60,10 +60,10 @@ export const AssignRedeemableModal = ({
             };
 
             const saved = existingRedeemable
-                ? await updateRedeemable(challengeName, existingRedeemable.id, dto)
+                ? await updateRedeemable(challengeName, existingRedeemable.awardId, dto)
                 : await createRedeemable(dto);
 
-            const selectedAward = awards.find(a => a.id === Number(selectedAwardId));
+            const selectedAward = awards.find(a => a.awardId === Number(selectedAwardId));
             const enriched = {
                 ...saved,
                 name: selectedAward?.name,
@@ -97,7 +97,7 @@ export const AssignRedeemableModal = ({
                     >
                         <option value="">Selecciona un premio</option>
                         {awards.map((award) => (
-                            <option key={award.id} value={award.id}>
+                            <option key={award.awardId} value={award.awardId}>
                                 {award.name}
                             </option>
                         ))}

@@ -9,7 +9,7 @@ interface AwardFormProps {
 
 export const AwardForm: React.FC<AwardFormProps> = ({ initialData, onSubmit, onCancel }) => {
     const [form, setForm] = useState<AwardData>({
-        id: initialData?.id || 0,
+        awardId: initialData?.awardId || 0,
         name: initialData?.name || "",
         description: initialData?.description || "",
         inStock: initialData?.inStock,

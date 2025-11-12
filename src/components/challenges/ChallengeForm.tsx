@@ -77,10 +77,8 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
             };
             setForm(updated);
             onSubmit(updated);
-        } catch (error: never) {
+        } catch (error: unknown) {
             console.error("Error al eliminar el redimible:", error);
-            const msg = error?.response?.data?.message || error?.message || "Error desconocido";
-            alert("No se pudo eliminar el premio: " + msg);
         }
     };
 
