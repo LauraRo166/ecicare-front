@@ -13,6 +13,14 @@ interface AssignRedeemableModalProps {
     onSave?: (redeemable: RedeemableData) => void;
 }
 
+interface RawAward {
+    id: number;
+    name: string;
+    description?: string;
+    inStock?: number;
+    imageUrl?: string;
+}
+
 export const AssignRedeemableModal = ({
                                           isOpen,
                                           onClose,
@@ -32,8 +40,17 @@ export const AssignRedeemableModal = ({
     useEffect(() => {
         const fetchAwards = async () => {
             try {
-                const data = await getAwards(1, 50);
-                setAwards(data.filter((a) => a.awardId !== undefined));
+                const data: RawAward[] = await getAwards(1, 50);
+                const formatted: AwardData[] = data.map((a) => ({
+                    id: a.id,
+                    awardId: a.id,
+                    name: a.name,
+                    description: a.description,
+                    inStock: a.inStock,
+                    imageUrl: a.imageUrl,
+                }));
+
+                setAwards(formatted);
             } catch (error) {
                 console.error("Error cargando premios:", error);
             }

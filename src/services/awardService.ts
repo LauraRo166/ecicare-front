@@ -1,9 +1,38 @@
 import apiClient from "@/services/axiosService";
 import type { AwardData } from "@/types/awardData.ts";
 
+interface RawAward {
+    id: number;
+    name: string;
+    description?: string;
+    inStock?: number;
+    imageUrl?: string;
+}
+
 export const getAwards = async (page: number = 1, size: number = 8): Promise<AwardData[]> => {
-    const response = await apiClient.get(`/awards?page=${page}&size=${size}`);
-    return response.data;
+    try {
+        const response = await apiClient.get(`/awards?page=${page}&size=${size}`);
+        const raw = response.data;
+
+        // raw puede ser un array directo o un objeto paginado { content: [...] }
+        const items: RawAward[] = Array.isArray(raw)
+            ? raw
+            : (raw?.content ?? raw?.data ?? []);
+
+        if (!Array.isArray(items)) return [];
+
+        return items.map((a) => ({
+            id: a.id,
+            awardId: a.id,
+            name: a.name,
+            description: a.description,
+            inStock: a.inStock,
+            imageUrl: a.imageUrl,
+        }));
+    } catch (error) {
+        console.error("Error en getAwards:", error);
+        throw error; // dejar que el componente maneje el error
+    }
 };
 
 export const getAwardsTotal = async (): Promise<number> => {
@@ -28,14 +57,4 @@ export const updateAward = async (award: AwardData): Promise<AwardData> => {
 
 export const deleteAward = async (awardId: number): Promise<void> => {
     await apiClient.delete(`/awards/${awardId}`);
-};
-
-export const searchAwardsByName = async (
-    search: string,
-    page: number = 0,
-    size: number = 8
-): Promise<AwardData[]> => {
-    if (!search.trim()) return []; // evitar llamadas vacías
-    const response = await apiClient.get(`/awards/search?q=${encodeURIComponent(search)}&page=${page}&size=${size}`);
-    return response.data.content ?? []; // manejar Page<Award> correctamente
 };
