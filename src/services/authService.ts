@@ -13,7 +13,7 @@ export async function login(
     email: string,
     password: string
 ): Promise<LoginResponse> {
-    if (email === "local@test.co" && password === "local") {
+    if (email === "admin@escuelaing.edu.co" && password === "admin") {
         console.warn("⚠️ Usando credenciales de desarrollo locales.");
         await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -22,11 +22,11 @@ export async function login(
             type: "Bearer",
             id: "user-local-123",
             name: "Usuario de Prueba Local",
-            email: "local@test.com",
+            email: "admin@escuelaing.edu.co",
             role: "ADMINISTRATION",
         };
     }
-    if (email === "local2@test.co" && password === "local2") {
+    if (email === "colaborador@escuelaing.edu.co" && password === "colaborador") {
         console.warn("⚠️ Usando credenciales de desarrollo locales.");
         await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -35,7 +35,7 @@ export async function login(
             type: "Bearer",
             id: "user-local",
             name: "Usuario de prueba",
-            email: "local2@test.com",
+            email: "colaborador@escuelaing.edu.co",
             role: "COLLABORATOR",
         };
     }

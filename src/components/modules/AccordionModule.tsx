@@ -3,8 +3,9 @@ import { SectionActions } from "@/components/common/SectionActions.tsx";
 import { AddChallengeModal } from "@/components/challenges/AddChallengeModal.tsx";
 import { EditModuleModal } from "@/components/modules/EditModuleModal.tsx";
 import { DeleteModuleModal } from "@/components/modules/DeleteModuleModal.tsx";
-import type {ChallengeData} from "@/types/challengeData.ts";
-import type {ModuleData} from "@/types/moduleData.ts";
+import { AddCollaboratorModal } from "@/components/modules/AddCollaboratorModal.tsx";
+import type { ChallengeData } from "@/types/challengeData.ts";
+import type { ModuleData } from "@/types/moduleData.ts";
 
 interface AccordionModuleProps {
     module: ModuleData;
@@ -14,20 +15,34 @@ interface AccordionModuleProps {
     onEditModule: (module: ModuleData) => void;
 }
 
-export const AccordionModule = ({module,
+export const AccordionModule = ({
+                                    module,
                                     children,
                                     onAddChallenge,
                                     onDeleteModule,
-                                    onEditModule
+                                    onEditModule,
                                 }: AccordionModuleProps) => {
+
     const [open, setOpen] = useState(false);
 
     const [isAdd, setIsAdd] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
+    const [isAddCollaborator, setIsAddCollaborator] = useState(false);
 
     return (
         <div className="flex items-stretch mb-2 rounded-xl overflow-hidden shadow bg-white">
+
+            {/* Modal agregar colaborador */}
+            <AddCollaboratorModal
+                isOpen={isAddCollaborator}
+                onClose={() => setIsAddCollaborator(false)}
+                moduleName={module.name}
+                onSuccess={(updatedModule) => {
+                    onEditModule(updatedModule); // refresca inmediatamente
+                }}
+            />
+
             <AddChallengeModal
                 isOpen={isAdd}
                 onClose={() => setIsAdd(false)}
@@ -43,7 +58,7 @@ export const AccordionModule = ({module,
                     description: module.description ?? "",
                     imageUrl: module.imageUrl ?? ""
                 }}
-                onUpdate={(module)=> onEditModule(module)}
+                onUpdate={(module) => onEditModule(module)}
             />
 
             <DeleteModuleModal
@@ -61,6 +76,7 @@ export const AccordionModule = ({module,
                     onAdd={() => setIsAdd(true)}
                     onEdit={() => setIsEdit(true)}
                     onDelete={() => setIsDelete(true)}
+                    onAddCollaborator={() => setIsAddCollaborator(true)} // ← NUEVO
                 />
             </div>
 
@@ -87,8 +103,13 @@ export const AccordionModule = ({module,
                     <span>{open ? "▲" : "▼"}</span>
                 </button>
 
-                {open && <div className="bg-white p-4 border-t border-gray-200">{children}</div>}
+                {open && (
+                    <div className="bg-white p-4 border-t border-gray-200">
+                        {children}
+                    </div>
+                )}
             </div>
+
         </div>
     );
 };

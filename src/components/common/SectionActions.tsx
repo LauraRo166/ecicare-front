@@ -1,14 +1,22 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { Edit, PlusCircle, Trash2 } from "lucide-react";
+import { Edit, PlusCircle, Trash2, UserPlus } from "lucide-react";
 
 interface SectionActionsProps {
     title?: string;
     onAdd?: () => void;
     onEdit?: () => void;
     onDelete?: () => void;
+    onAddCollaborator?: () => void;   // ← NUEVO
 }
 
-export const SectionActions = ({ title, onAdd, onEdit, onDelete }: SectionActionsProps) => {
+export const SectionActions = ({
+                                   title,
+                                   onAdd,
+                                   onEdit,
+                                   onDelete,
+                                   onAddCollaborator            // ← NUEVO
+                               }: SectionActionsProps) => {
+
     const { role } = useAuth();
 
     const isReadOnly = role === "COLLABORATOR";
@@ -57,6 +65,18 @@ export const SectionActions = ({ title, onAdd, onEdit, onDelete }: SectionAction
                     disabled={isReadOnly}
                 >
                     <Trash2 className="text-red-500 w-5 h-5" />
+                </button>
+            )}
+
+            {onAddCollaborator && (
+                <button
+                    onClick={!isReadOnly ? onAddCollaborator : undefined}
+                    className={`bg-white px-2 py-2 ${
+                        isReadOnly ? "opacity-40 cursor-not-allowed" : "hover:bg-blue-100"
+                    }`}
+                    disabled={isReadOnly}
+                >
+                    <UserPlus className="text-blue-500 w-5 h-5" />
                 </button>
             )}
         </div>

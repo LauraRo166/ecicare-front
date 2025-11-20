@@ -3,33 +3,52 @@ import { AccordionModule } from "@/components/modules/AccordionModule.tsx";
 import { Challenge } from "@/components/challenges/Challenge.tsx";
 import type { ChallengeData } from "@/types/challengeData.ts";
 import type { ModuleData } from "@/types/moduleData.ts";
-import { getAllModules, getModuleChallenges, getTotalModules } from "@/services/moduleService";
-import { getAwardsByChallenge } from "@/services/challengeService"; // 🔹 nuevo import
+import {
+    getAllModules,
+    getModuleChallenges,
+    getTotalModules,
+    getModulesByAdministrator
+} from "@/services/moduleService";
+import { getAwardsByChallenge } from "@/services/challengeService";
 import { Pagination } from "@/components/common/Pagination.tsx";
-import type {RedeemableData} from "@/types/redeemableData.ts";
+import type { RedeemableData } from "@/types/redeemableData.ts";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DashboardModulesProps {
     newModule?: ModuleData;
 }
 
 export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
+    const { role, email } = useAuth();
+
     const [modules, setModules] = useState<ModuleData[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
     const PAGE_SIZE = 5;
 
     const fetchModules = async (pageNumber: number) => {
         setLoading(true);
         try {
-            const totalModules = await getTotalModules();
-            setTotalPages(Math.ceil(totalModules / PAGE_SIZE));
+            let modulesResponse;
+            let total;
 
-            const modulesResponse = await getAllModules(pageNumber - 1, PAGE_SIZE);
-            const modulesData: ModuleData[] = modulesResponse.content;
+            if (role === "COLLABORATOR") {
+                const data = await getModulesByAdministrator(email, pageNumber - 1, PAGE_SIZE);
+                modulesResponse = data.content;
+                total = data.totalElements;
+            } else {
+                const totalModules = await getTotalModules();
+                total = totalModules;
+                const all = await getAllModules(pageNumber - 1, PAGE_SIZE);
+                modulesResponse = all.content;
+            }
+
+            setTotalPages(Math.ceil(total / PAGE_SIZE));
 
             const modulesWithChallenges: ModuleData[] = await Promise.all(
-                modulesData.map(async (mod: ModuleData) => {
+                modulesResponse.map(async (mod: ModuleData) => {
                     const challenges: ChallengeData[] = await getModuleChallenges(mod.name);
 
                     const challengesWithAwards = await Promise.all(
@@ -48,7 +67,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
 
                                 return { ...c, redeemables };
                             } catch (error) {
-                                console.error("Error cargando premios para el reto:", c.name, error);
+                                console.error("Error cargando premios:", c.name, error);
                                 return { ...c, redeemables: [] };
                             }
                         })
@@ -68,7 +87,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
 
     useEffect(() => {
         fetchModules(page);
-    }, [page]);
+    }, [page, role]);
 
     useEffect(() => {
         if (newModule) {
@@ -80,7 +99,10 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
         setModules(prev =>
             prev.map(mod =>
                 mod.name === moduleName
-                    ? { ...mod, challenges: [...(mod.challenges || []), { ...newChallenge, redeemables: [] }] }
+                    ? {
+                        ...mod,
+                        challenges: [...(mod.challenges || []), { ...newChallenge, redeemables: [] }]
+                    }
                     : mod
             )
         );
@@ -90,9 +112,10 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
         setModules(prevModules =>
             prevModules.map(mod => ({
                 ...mod,
-                challenges: mod.challenges?.map(ch =>
-                    ch.name === updatedChallenge.name ? updatedChallenge : ch
-                ) || []
+                challenges:
+                    mod.challenges?.map(ch =>
+                        ch.name === updatedChallenge.name ? updatedChallenge : ch
+                    ) || []
             }))
         );
     };
@@ -106,6 +129,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
             prev.map(m => (m.name === updatedModule.name ? updatedModule : m))
         );
     };
+
     const handleDeleteChallenge = (challengeName: string) => {
         setModules(prevModules =>
             prevModules.map(mod => ({
@@ -145,6 +169,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
             ) : (
                 <p className="text-center mt-6">No hay módulos disponibles</p>
             )}
+
             <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
     );

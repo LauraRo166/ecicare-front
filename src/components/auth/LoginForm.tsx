@@ -23,7 +23,7 @@ const Login: React.FC = () => {
         // --- LÓGICA DE SIMULACIÓN PARA DESARROLLO LOCAL ---
         await new Promise((resolve) => setTimeout(resolve, 800));
 
-        if (username === "local2@test.co" && password === "local2") {
+        if (username === "colaborador@escuelaing.edu.co" && password === "colaborador") {
             console.warn(
                 "⚠️ Login exitoso con credenciales de desarrollo locales."
             );
@@ -33,7 +33,7 @@ const Login: React.FC = () => {
                 token: "fake-jwt-token-for-local-development",
                 refreshToken: "fake-refresh-token",
                 id: "user-local-123",
-                email: "local@test.com",
+                email: "colaborador@escuelaing.edu.co",
                 name: "Usuario de Prueba",
                 role: "COLLABORATOR",
             };
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
             );
         }
         // Credenciales falsas para la prueba
-        if (username === "local@test.co" && password === "local") {
+        if (username === "admin@escuelaing.edu.co" && password === "admin") {
             console.warn(
                 "⚠️ Login exitoso con credenciales de desarrollo locales."
             );
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
                 token: "fake-jwt-token-for-local-development",
                 refreshToken: "fake-refresh-token",
                 id: "user-local-123",
-                email: "local@test.com",
+                email: "admin@escuelaing.edu.co",
                 name: "Usuario de Prueba",
                 role: "ADMINISTRATION",
             };

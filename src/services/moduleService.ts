@@ -144,3 +144,4 @@ export const searchModulesByAdmin = async (email: string, name = "", page = 0, s
     })
     return response.data
 }
+
