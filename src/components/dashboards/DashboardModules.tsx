@@ -30,23 +30,38 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
 
     const fetchModules = async (pageNumber: number) => {
         setLoading(true);
+
         try {
             let modulesResponse;
             let total;
 
+            // ⛔ Si es colaborador y no hay email, NO LLAMES EL SERVICIO
             if (role === "COLLABORATOR") {
-                const data = await getModulesByAdministrator(email, pageNumber - 1, PAGE_SIZE);
+                if (!email) {
+                    console.error("No email available for collaborator");
+                    setLoading(false);
+                    return;
+                }
+
+                const data = await getModulesByAdministrator(
+                    email,                // <-- email ya no puede ser null
+                    pageNumber - 1,
+                    PAGE_SIZE
+                );
+
                 modulesResponse = data.content;
                 total = data.totalElements;
             } else {
                 const totalModules = await getTotalModules();
                 total = totalModules;
+
                 const all = await getAllModules(pageNumber - 1, PAGE_SIZE);
                 modulesResponse = all.content;
             }
 
             setTotalPages(Math.ceil(total / PAGE_SIZE));
 
+            // Cargar retos + premios
             const modulesWithChallenges: ModuleData[] = await Promise.all(
                 modulesResponse.map(async (mod: ModuleData) => {
                     const challenges: ChallengeData[] = await getModuleChallenges(mod.name);
@@ -67,7 +82,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
 
                                 return { ...c, redeemables };
                             } catch (error) {
-                                console.error("Error cargando premios:", c.name, error);
+                                console.error("Error loading awards:", c.name, error);
                                 return { ...c, redeemables: [] };
                             }
                         })
@@ -79,15 +94,17 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
 
             setModules(modulesWithChallenges);
         } catch (error) {
-            console.error("Error cargando módulos:", error);
+            console.error("Error loading modules:", error);
         } finally {
             setLoading(false);
         }
     };
 
+    // 🔥 Ahora depende de email también
     useEffect(() => {
+        if (role === "COLLABORATOR" && !email) return; // Evita llamada inválida
         fetchModules(page);
-    }, [page, role]);
+    }, [page, role, email]);
 
     useEffect(() => {
         if (newModule) {

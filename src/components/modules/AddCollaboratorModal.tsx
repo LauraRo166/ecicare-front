@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Modal } from "@/components/common/Modal.tsx";
+import type { ModuleData } from "@/types/moduleData.ts";
 import { updateModuleAdministrator } from "@/services/moduleService.js";
 
 interface AddCollaboratorModalProps {
     isOpen: boolean;
     onClose: () => void;
     moduleName: string;
-    onSuccess: (updatedModule: unknown) => void;
+    onSuccess: (updatedModule: ModuleData) => void;
 }
 
 export const AddCollaboratorModal = ({ isOpen, onClose, moduleName, onSuccess }: AddCollaboratorModalProps) => {
