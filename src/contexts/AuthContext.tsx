@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Guardar en localStorage
         localStorage.setItem("email", user.email);
         localStorage.setItem("role", user.role);
-
+        // Context ok
         // Guardar en react state
         setIsAuthenticated(true);
         setRole(user.role);
