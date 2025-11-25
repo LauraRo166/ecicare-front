@@ -35,7 +35,6 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
             let modulesResponse;
             let total;
 
-            // ⛔ Si es colaborador y no hay email, NO LLAMES EL SERVICIO
             if (role === "COLLABORATOR") {
                 if (!email) {
                     console.error("No email available for collaborator");
@@ -44,7 +43,7 @@ export const DashboardModules = ({ newModule }: DashboardModulesProps) => {
                 }
 
                 const data = await getModulesByAdministrator(
-                    email,                // <-- email ya no puede ser null
+                    email,
                     pageNumber - 1,
                     PAGE_SIZE
                 );

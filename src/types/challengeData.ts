@@ -9,6 +9,7 @@ export interface ChallengeData {
     duration?: string;
     goals?: string[];
     moduleName?: string;
+    requiredVerifications?: number;
     redeemables?: RedeemableData[];
 }
 

@@ -111,6 +111,13 @@ export const Challenge = ({ challenge, onUpdate, onDelete }: ChallengeProps) => 
                         </div>
                     )}
 
+                    {typeof challenge.requiredVerifications === "number" && (
+                        <p className="flex items-center gap-2">
+                            <span className="font-semibold">Verificaciones requeridas:</span>
+                            {challenge.requiredVerifications}
+                        </p>
+                    )}
+
                     <div className="flex items-start gap-2 mt-2">
                         <Gift className="w-4 h-4 text-yellow-600 mt-1" />
                         <div>

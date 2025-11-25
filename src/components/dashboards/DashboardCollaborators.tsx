@@ -1,6 +1,5 @@
 import { useState } from "react"
-import { createEcicareUser } from "@/services/userEcicareService.ts"
-import type { UserEcicareDto } from "@/types/userEcicareData"
+import {getEcicareUserById, updateUserRole} from "@/services/userEcicareService.ts"
 
 export const DashboardCollaborators = () => {
     const [idEci, setIdEci] = useState("")
@@ -18,23 +17,22 @@ export const DashboardCollaborators = () => {
         setLoading(true)
 
         try {
-            const user: UserEcicareDto = {
-                idEci: parseInt(idEci),
-                name,
-                email,
-                password,
-                role: "COLLABORATOR",
+            // 1. obtener el usuario por ID
+            const existingUser = await getEcicareUserById(parseInt(idEci))
+
+            if (!existingUser) {
+                setError("No existe un usuario con ese ID.")
+                return
             }
 
-            await createEcicareUser(user)
-            setMessage("Colaborador creado exitosamente")
+            // 2. actualizar el rol
+            await updateUserRole(existingUser.idEci, "COLLABORATOR")
+
+            setMessage("Rol actualizado exitosamente a COLLABORATOR")
             setIdEci("")
-            setName("")
-            setEmail("")
-            setPassword("")
-        } catch (err: unknown) {
+        } catch (err) {
             console.error(err)
-            setError("Error al crear el colaborador. Verifica los datos o si el usuario ya existe.")
+            setError("Error al actualizar el rol del colaborador.")
         } finally {
             setLoading(false)
         }

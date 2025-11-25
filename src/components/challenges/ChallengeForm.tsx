@@ -22,6 +22,7 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
             duration: "",
             goals: [],
             moduleName: "",
+            requiredVerifications: 1,
             redeemables: [],
         }
     );
@@ -42,6 +43,7 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
             ...form,
             tips: tipsText.split(",").map((v) => v.trim()).filter(Boolean),
             goals: goalsText.split(",").map((v) => v.trim()).filter(Boolean),
+            requiredVerifications: Number(form.requiredVerifications ?? 1),
         };
         onSubmit(updatedForm);
         setIsChallengeCreated(true);
@@ -135,12 +137,22 @@ export const ChallengeForm = ({ initialData, onSubmit, onClose }: ChallengeFormP
                 className="mt-1 block w-full rounded-lg border border-gray-300 p-2"
             />
             <input
+                type="number"
+                name="requiredVerifications"
+                placeholder="Número de verificaciones requeridas"
+                min={1}
+                value={form.requiredVerifications ?? 1}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-300 p-2"
+            />
+            <input
                 type="datetime-local"
                 name="duration"
                 value={form.duration}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-lg border border-gray-300 p-2"
             />
+
 
             <div className="mt-6">
                 <h3 className="font-semibold mb-2">Premios del reto</h3>
