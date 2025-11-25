@@ -13,7 +13,7 @@ export const AwardsPage = () => {
         <div className="flex flex-col h-screen w-full">
             <div className="min-h-screen w-full bg-[#fceceb] p-0">
                 {/* Header */}
-                <Header title="Administrador" />
+                <Header/>
                 {/* Botón Nuevo Premio */}
                 <div className="px-10 py-4 mb-6">
                     <button

@@ -14,7 +14,7 @@ export const ModulesPage = () => {
         <div className="flex flex-col h-screen w-full">
             <div className="min-h-screen w-full bg-[#fceceb] p-0">
                 {/* Header */}
-                <Header title="Administrador" />
+                <Header/>
 
                 {/* Acciones */}
                 <div className="flex gap-4 px-8 py-4 justify-center">
