@@ -77,3 +77,8 @@ export const getRegisteredUsersByChallenge = async (challengeName: string) => {
     const response = await apiClient.get(`/challenges/${encodeURIComponent(challengeName)}/registered-users`);
     return response.data;
 };
+
+export const getConfirmedUsersByChallenge = async (challengeName: string) => {
+    const response = await apiClient.get(`/challenges/${encodeURIComponent(challengeName)}/confirmed-users`);
+    return response.data;
+};

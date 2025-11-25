@@ -28,9 +28,9 @@ export const updateUserRole = async (
     await apiClient.patch(`/ecicareusers/${id}/role?role=${role}`);
 };
 
-export const searchUsers = async (query: string) => {
+export const searchUsers = async (query: string, role?: string) => {
     const response = await apiClient.get(`/ecicareusers/search`, {
-        params: { query }
+        params: { query, role }
     });
     return response.data;
 };

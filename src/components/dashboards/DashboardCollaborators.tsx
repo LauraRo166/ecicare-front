@@ -1,116 +1,145 @@
-import { useState } from "react"
-import {getEcicareUserById, updateUserRole} from "@/services/userEcicareService.ts"
+import { useEffect, useState } from "react"
+import { searchUsers, updateUserRole } from "@/services/userEcicareService"
+import type { UserEcicareResponseDTO } from "@/types/userEcicareData"
 
-export const DashboardCollaborators = () => {
-    const [idEci, setIdEci] = useState("")
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
+export function DashboardCollaborators() {
+    const [query, setQuery] = useState("")
+    const [results, setResults] = useState<UserEcicareResponseDTO[]>([])
+    const [selectedUser, setSelectedUser] = useState<UserEcicareResponseDTO | null>(null)
+
+    const [loadingSearch, setLoadingSearch] = useState(false)
+    const [updatingRole, setUpdatingRole] = useState(false)
+
     const [message, setMessage] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setMessage(null)
-        setError(null)
-        setLoading(true)
-
-        try {
-            // 1. obtener el usuario por ID
-            const existingUser = await getEcicareUserById(parseInt(idEci))
-
-            if (!existingUser) {
-                setError("No existe un usuario con ese ID.")
+    // Debounce de búsqueda
+    useEffect(() => {
+        const delay = setTimeout(async () => {
+            if (query.length < 2) {
+                setResults([])
                 return
             }
 
-            // 2. actualizar el rol
-            await updateUserRole(existingUser.idEci, "COLLABORATOR")
+            try {
+                setLoadingSearch(true)
+                const users = await searchUsers(query)
+                setResults(users)
+            } catch (err) {
+                console.error(err)
+            } finally {
+                setLoadingSearch(false)
+            }
+        }, 300)
 
-            setMessage("Rol actualizado exitosamente a COLLABORATOR")
-            setIdEci("")
+        return () => clearTimeout(delay)
+    }, [query])
+
+    const handleSelectUser = (user: UserEcicareResponseDTO) => {
+        setSelectedUser(user)
+        setQuery(user.name)
+        setResults([])
+    }
+
+    const handleConvert = async () => {
+        if (!selectedUser) {
+            setError("Debes seleccionar un usuario primero.")
+            return
+        }
+
+        setError(null)
+        setMessage(null)
+        setUpdatingRole(true)
+
+        try {
+            await updateUserRole(selectedUser.idEci, "COLLABORATOR")
+
+            setMessage(
+                `El usuario ${selectedUser.name} ahora es COLABORADOR.`
+            )
+
+            setSelectedUser(null)
+            setQuery("")
         } catch (err) {
             console.error(err)
-            setError("Error al actualizar el rol del colaborador.")
+            setError("Error al actualizar el rol.")
         } finally {
-            setLoading(false)
+            setUpdatingRole(false)
         }
     }
 
     return (
-        <div className="min-h-screen w-full bg-[#fceceb] flex flex-col items-center">
-            <div className="bg-white rounded-2xl shadow p-8 w-full max-w-2xl border border-gray-200 mt-10">
-                <h2 className="text-2xl font-bold text-black mb-6">Registrar nuevo colaborador</h2>
+        <div className="min-h-screen w-full bg-[#fceceb] p-0 flex flex-col items-center">
+            <div className="bg-white rounded-2xl shadow p-6 w-full max-w-2xl border border-gray-200 mt-8">
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            ID ECI
-                        </label>
-                        <input
-                            type="number"
-                            value={idEci}
-                            onChange={(e) => setIdEci(e.target.value)}
-                            required
-                            className="w-full border border-gray-300 rounded-lg p-2"
-                            placeholder="Ej: 12345"
-                        />
+                <h2 className="text-xl font-bold text-black mb-4">
+                    Crear colaborador
+                </h2>
+
+                {/* INPUT DE BÚSQUEDA */}
+                <div className="relative mb-4">
+                    <input
+                        type="text"
+                        className="border border-gray-300 w-full p-2 rounded-lg"
+                        placeholder="Busca un usuario por nombre..."
+                        value={query}
+                        onChange={(e) => {
+                            setQuery(e.target.value)
+                            setSelectedUser(null)
+                        }}
+                    />
+
+                    {/* Dropdown */}
+                    {results.length > 0 && (
+                        <ul className="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            {results.map((user) => (
+                                <li
+                                    key={user.idEci}
+                                    onClick={() => handleSelectUser(user)}
+                                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                                >
+                                    <span className="font-medium">{user.name}</span>
+                                    <span className="text-gray-600 text-sm block">
+                                        {user.email}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
+                    {loadingSearch && query.length > 1 && (
+                        <p className="text-sm text-gray-500 mt-1">
+                            Buscando...
+                        </p>
+                    )}
+                </div>
+
+                {/* Usuario seleccionado */}
+                {selectedUser && (
+                    <div className="p-3 bg-gray-50 border rounded-lg mb-4 shadow-sm">
+                        <p className="font-medium">{selectedUser.name}</p>
+                        <p className="text-sm text-gray-600">
+                            {selectedUser.email}
+                        </p>
                     </div>
+                )}
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Nombre completo
-                        </label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            className="w-full border border-gray-300 rounded-lg p-2"
-                            placeholder="Ej: Samuel Rodríguez"
-                        />
-                    </div>
+                {/* Botón convertir */}
+                <button
+                    onClick={handleConvert}
+                    disabled={updatingRole || !selectedUser}
+                    className="w-full bg-[#d84239] hover:bg-[#b5372e] text-white py-2 rounded-lg disabled:bg-gray-400"
+                >
+                    {updatingRole ? "Actualizando..." : "Convertir en colaborador"}
+                </button>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Correo institucional
-                        </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className="w-full border border-gray-300 rounded-lg p-2"
-                            placeholder="Ej: samuel.rodriguez@escuelaing.edu.co"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Contraseña
-                        </label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className="w-full border border-gray-300 rounded-lg p-2"
-                            placeholder="Contraseña"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="bg-[#d84239] hover:bg-[#b5372e] text-white px-4 py-2 rounded-lg mt-4 font-semibold transition-all disabled:opacity-70"
-                    >
-                        {loading ? "Creando..." : "Crear colaborador"}
-                    </button>
-                </form>
-
-                {message && <p className="text-green-600 mt-4 font-medium">{message}</p>}
-                {error && <p className="text-red-600 mt-4 font-medium">{error}</p>}
+                {/* Mensajes */}
+                {message && (
+                    <p className="text-green-600 mt-3 font-medium">{message}</p>
+                )}
+                {error && (
+                    <p className="text-red-600 mt-3 font-medium">{error}</p>
+                )}
             </div>
         </div>
     )
